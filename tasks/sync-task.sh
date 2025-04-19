@@ -18,10 +18,14 @@ fi
 
 for pattern in $PATTERNS; do
     echo "[INFO] Searching pattern: *${pattern}*.mp4"
+    # パターンごとのコピー先ディレクトリを作成
+    dest_dir="${SYNC_DIR}/${pattern}"
+    mkdir -p "$dest_dir"
+
     # CMを含んだファイルは除外(例: 2023-01-01-00-00-00-cm.mp4)
     find "$SEARCH_DIR" -type f -name "*${pattern}*.mp4" ! -name "*-cm.mp4" | while read -r src; do
         filename="$(basename "$src")"
-        dest="${SYNC_DIR}/${filename}"
+        dest="${dest_dir}/${filename}"
         # 既に存在する場合はスキップ
         if [ -f "$dest" ]; then
             echo "[SKIP] Already exists: $filename"
@@ -32,4 +36,5 @@ for pattern in $PATTERNS; do
     done
 done
 
+echo "[INFO] Unmounting SMB share"
 umount "$SMB_MOUNT"
