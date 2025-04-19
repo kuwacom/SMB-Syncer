@@ -1,0 +1,35 @@
+#!/bin/bash
+set -e
+
+SMB_MOUNT="/mnt/share"
+SYNC_DIR="/mnt/sync"
+mkdir -p "$SMB_MOUNT" "$SYNC_DIR"
+
+echo "[INFO] Mounting SMB share: //$SMB_HOST/$SMB_SHARE_NAME"
+mount -t cifs "//${SMB_HOST}/${SMB_SHARE_NAME}" "$SMB_MOUNT" \
+    -o "username=${SMB_USER},password=${SMB_PASS},iocharset=utf8,sec=ntlmssp"
+
+SEARCH_DIR="${SMB_MOUNT}/${TARGET_SUBDIR}"
+if [ ! -d "$SEARCH_DIR" ]; then
+    echo "[ERROR] SMBディレクトリが存在しません: $SEARCH_DIR"
+    umount "$SMB_MOUNT"
+    exit 1
+fi
+
+for pattern in $PATTERNS; do
+    echo "[INFO] Searching pattern: *${pattern}*.mp4"
+    # CMを含んだファイルは除外(例: 2023-01-01-00-00-00-cm.mp4)
+    find "$SEARCH_DIR" -type f -name "*${pattern}*.mp4" ! -name "*-cm.mp4" | while read -r src; do
+        filename="$(basename "$src")"
+        dest="${SYNC_DIR}/${filename}"
+        # 既に存在する場合はスキップ
+        if [ -f "$dest" ]; then
+            echo "[SKIP] Already exists: $filename"
+        else
+            echo "[COPY] $filename → $dest"
+            cp "$src" "$dest"
+        fi
+    done
+done
+
+umount "$SMB_MOUNT"

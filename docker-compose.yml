@@ -1,0 +1,13 @@
+services:
+  sync-service:
+    image: ubuntu:20.04
+    container_name: sync-service
+    network_mode: host
+    privileged: true
+    env_file:
+      - .env
+    volumes:
+      - ./sync-data:/mnt/sync
+      - ./tasks:/opt/tasks:ro
+      - ./env.sh:/opt/env.sh:ro
+    entrypoint: ["/opt/tasks/entrypoint.sh"]

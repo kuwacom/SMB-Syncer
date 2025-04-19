@@ -1,0 +1,2 @@
+# 毎時 0 分に sync-task.sh を実行
+0 * * * * root /opt/tasks/sync-task.sh >> /var/log/sync-task.log 2>&1
