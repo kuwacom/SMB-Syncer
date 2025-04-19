@@ -1,0 +1,22 @@
+# Ignore video files
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.flv
+*.wmv
+/sync-data
+
+# Ignore Tailscale-related files
+tailscale*
+
+# Ignore env
+.env
+
+# Ignore macOS system files
+.DS_Store
+.AppleDouble
+.AppleDesktop
+.LSOverride
+# Thumbnails
+Icon?
