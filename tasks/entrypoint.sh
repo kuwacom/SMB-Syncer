@@ -15,9 +15,12 @@ crontab /etc/cron.d/sync-schedule
 # chmod +x /opt/tasks/sync-task.sh
 
 # 起動時に sync-task.sh を実行
-echo "Starting sync-task.sh"
+echo "[$(date '+%Y-%m-%d %H:%M:%S')][INFO] Starting sync-task.sh"
 bash /opt/tasks/sync-task.sh
 
 # 4. cron をフォアグラウンドで起動
-echo "Cron started in foreground"
+echo "[$(date '+%Y-%m-%d %H:%M:%S')][INFO] Cron started in foreground"
 cron -f
+
+# 5. cron ログを表示
+tail -f /var/log/sync-task.log

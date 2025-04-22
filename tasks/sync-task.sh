@@ -5,7 +5,9 @@ SMB_MOUNT="/mnt/share"
 SYNC_DIR="/mnt/sync"
 mkdir -p "$SMB_MOUNT" "$SYNC_DIR"
 
-echo "[INFO] Mounting SMB share: //$SMB_HOST/$SMB_SHARE_NAME"
+echo "[$(date '+%Y-%m-%d %H:%M:%S')][INFO] Starting sync-task.sh"
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')][INFO] Mounting SMB share: //$SMB_HOST/$SMB_SHARE_NAME"
 mount -t cifs "//${SMB_HOST}/${SMB_SHARE_NAME}" "$SMB_MOUNT" \
     -o "username=${SMB_USER},password=${SMB_PASS},iocharset=utf8,sec=ntlmssp"
 
@@ -17,7 +19,7 @@ if [ ! -d "$SEARCH_DIR" ]; then
 fi
 
 for pattern in $PATTERNS; do
-    echo "[INFO] Searching pattern: *${pattern}*.mp4"
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')][INFO] Searching pattern: *${pattern}*.mp4"
     # パターンごとのコピー先ディレクトリを作成
     dest_dir="${SYNC_DIR}/${pattern}"
     mkdir -p "$dest_dir"
@@ -36,5 +38,5 @@ for pattern in $PATTERNS; do
     done
 done
 
-echo "[INFO] Unmounting SMB share"
+echo "[$(date '+%Y-%m-%d %H:%M:%S')][INFO] Unmounting SMB share"
 umount "$SMB_MOUNT"
