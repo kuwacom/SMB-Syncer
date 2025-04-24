@@ -9,4 +9,5 @@ services:
     volumes:
       - ./sync-data:/mnt/sync
       - ./tasks:/opt/tasks:ro
+      - ./.env:/opt/.env:ro
     entrypoint: ["/opt/tasks/entrypoint.sh"]

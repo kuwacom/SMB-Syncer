@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+source /opt/.env
+
 SMB_MOUNT="/mnt/share"
 SYNC_DIR="/mnt/sync"
 mkdir -p "$SMB_MOUNT" "$SYNC_DIR"
